@@ -9,5 +9,5 @@
 
 ### Current features:
 
-1. Tap + button in bottom left goes to add timer screen (cannot currently store, and add button just brings up snackbar)
+1. Tap + button in bottom right goes to add timer screen (cannot currently store timers and add button just brings up snackbar)
 2. Tap on timer in list (static list of hardcoded timers) goes to timer page which runs a timer (static time)
