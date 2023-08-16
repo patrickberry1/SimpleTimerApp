@@ -1,12 +1,15 @@
 package com.example.simpletimerapp;
 
-public class Step {
-    int minutes, seconds, reps;
+import java.io.Serializable;
 
-    public Step(int minutes, int seconds, int reps) {
+public class Step implements Serializable {
+    int minutes, seconds, reps, rest;
+
+    public Step(int minutes, int seconds, int reps, int rest) {
         this.minutes = minutes;
         this.seconds = seconds;
         this.reps = reps;
+        this.rest = rest;
     }
 
     public int getMinutes() {
@@ -31,5 +34,13 @@ public class Step {
 
     public void setReps(int reps) {
         this.reps = reps;
+    }
+
+    public int getRest() {
+        return rest;
+    }
+
+    public void setRest(int rest) {
+        this.rest = rest;
     }
 }

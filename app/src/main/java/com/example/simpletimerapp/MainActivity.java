@@ -17,7 +17,9 @@ import android.widget.TextView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -31,10 +33,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         List<Timer> timers = new ArrayList<Timer>();
-        timers.add(new Timer("Timer 1"));
-        timers.add(new Timer("Timer 2"));
-        timers.add(new Timer("Timer 3"));
-        timers.add(new Timer("Timer 5"));
+        timers.add(new Timer("Timer 1", Arrays.asList(new Step[]{new Step(0, 10, 3, 5)})));
+        timers.add(new Timer("Timer 2", Arrays.asList(new Step[]{new Step(1, 30, 1, 0)})));
+        timers.add(new Timer("Timer 3", Arrays.asList(new Step[]{new Step(1, 30, 2, 1)})));
+        timers.add(new Timer("Timer 5", Arrays.asList(new Step[]{new Step(1, 30, 5, 4)})));
 
         timer_list_rec_view = findViewById(R.id.timer_list_rec_view);
         timer_list_rec_view.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
@@ -47,10 +49,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(int position, Timer timer){
                 Intent intent = new Intent(MainActivity.this, StartTimerActivity.class);
-                Bundle b = new Bundle();
-                //intent.putExtra("Timer", 1);
-                //intent.putExtra("mins", 3);
-                //intent.putExtra("secs", 0);
+                intent.putExtra("Name", timer.name);
+                intent.putExtra("Steps",(Serializable) timer.stepList);
                 startActivity(intent);
             }
         });
