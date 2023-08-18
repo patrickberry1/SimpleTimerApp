@@ -16,7 +16,7 @@
             android:name=".StartTimerActivity"
             android:exported="false"
             android:parentActivityName=".MainActivity"
-            android:label="Timer App"/>
+            android:label="Timer"/>
         <activity
             android:name=".AddTimerActivity"
             android:exported="false"

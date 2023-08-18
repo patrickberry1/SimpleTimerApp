@@ -13,6 +13,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StartTimerActivity extends AppCompatActivity {
@@ -27,12 +28,12 @@ public class StartTimerActivity extends AppCompatActivity {
 
     //Timer variables
     CountDownTimer timer;
-    public int totalSeconds;
-    public int stepIndex;
-    public int repIndex;
     List<Step> steps;
     String name;
     Step currStep;
+    int totalSeconds;
+    int stepIndex;
+    int stepSeconds;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,17 +44,23 @@ public class StartTimerActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         steps = (List<Step>) extras.getSerializable("Steps");
         name = extras.getString("Name");
+        setTitle(name);
 
         //Set vars
         stepIndex = 0;
-        repIndex = 1;
         currStep = steps.get(stepIndex);
+        stepSeconds=(currStep.minutes*60) + currStep.seconds;
+        totalSeconds = 0;
+        for(int i=0; i<steps.size(); i++){
+            totalSeconds+=steps.get(i).seconds;
+            totalSeconds+=steps.get(i).minutes*60;
+        }
 
         //Views for timer display
         start_timer_button = (FloatingActionButton) findViewById(R.id.start_timer_button);
         timer_text_view = (TextView) findViewById(R.id.timer_text_view);
         rep_counter_text_view = (TextView) findViewById(R.id.rep_counter_text_view);
-        rep_counter_text_view.setText(String.format("Rep %d", repIndex));
+
 
         //Start timer
         start_timer_button.setOnClickListener(new View.OnClickListener()
@@ -69,24 +76,29 @@ public class StartTimerActivity extends AppCompatActivity {
                 stop_timer_button.setVisibility(View.VISIBLE);
                 stop_timer_button.setClickable(true);
 
-                //Set totalSeconds value from current step
-                totalSeconds = (currStep.minutes * 60) + currStep.seconds;
-
                 timer = new CountDownTimer(totalSeconds * 1000, 1000) {
                     public void onTick(long millisUntilFinished) {
+                        if(stepSeconds==0){
+                            stepIndex++;
+                            currStep=steps.get(stepIndex);
+                            if (currStep!=null){
+                                stepSeconds=(currStep.minutes*60) + currStep.seconds;
+                            }
+                        }
+
                         //Get minutes and seconds to display
-                        int mins = totalSeconds / 60;
                         String minsString;
-                        int secs = totalSeconds % 60;
                         String secsString;
+                        int mins = stepSeconds / 60;
+                        int secs = stepSeconds % 60;
 
                         if (mins < 10) {
-                            minsString = "0" + String.valueOf(mins);
+                            minsString = String.format("0%d", mins);
                         } else {
                             minsString = String.valueOf(mins);
                         }
                         if (secs < 10) {
-                            secsString = "0" + String.valueOf(secs);
+                            secsString = String.format("0%d", secs);
                         } else {
                             secsString = String.valueOf(secs);
                         }
@@ -95,32 +107,26 @@ public class StartTimerActivity extends AppCompatActivity {
                         timer_text_view.setText(minsString + ":" + secsString);
 
                         //Tick down totalSeconds
-                        totalSeconds--;
+                        stepSeconds--;
                     }
 
                     public void onFinish() {
                         cl = (ConstraintLayout) findViewById(R.id.start_timer_cl);
                         Snackbar snackbar = Snackbar.make(cl, "DING DING DING!!!", Snackbar.LENGTH_SHORT);
                         snackbar.show();
-                        if (repIndex < currStep.reps){
-                            repIndex++;
-                            rep_counter_text_view.setText(String.format("Rep %d", repIndex ));
-                            totalSeconds = (currStep.minutes * 60) + currStep.seconds;
-                            timer.start();
-                        } else {
-                            timer_text_view.setText("00:00");
-                            start_timer_button.setVisibility(View.VISIBLE);
-                            start_timer_button.setClickable(true);
-                            pause_timer_button.setVisibility(View.INVISIBLE);
-                            pause_timer_button.setClickable(false);
-                            stop_timer_button.setVisibility(View.INVISIBLE);
-                            stop_timer_button.setClickable(false);
-                        }
+                        timer_text_view.setText("00:00");
+                        start_timer_button.setVisibility(View.VISIBLE);
+                        start_timer_button.setClickable(true);
+                        pause_timer_button.setVisibility(View.INVISIBLE);
+                        pause_timer_button.setClickable(false);
+                        stop_timer_button.setVisibility(View.INVISIBLE);
+                        stop_timer_button.setClickable(false);
                     }
                 }.start();
             }
         });
 
+        //set up pause button
         pause_timer_button = (FloatingActionButton) findViewById(R.id.pause_timer_button);
         pause_timer_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,6 +141,7 @@ public class StartTimerActivity extends AppCompatActivity {
             }
         });
 
+        //set up stop button
         stop_timer_button = (FloatingActionButton) findViewById(R.id.stop_timer_button);
         stop_timer_button.setOnClickListener(new View.OnClickListener() {
             @Override
