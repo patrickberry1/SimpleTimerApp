@@ -16,7 +16,7 @@
 5. Can pause and stop timer.
 
 
-###TODO:
+### TODO:
 
-Tidy eberything up and make it all look nice.
+Tidy everything up and make it all look nice.
 Implement Reps for timer steps.
