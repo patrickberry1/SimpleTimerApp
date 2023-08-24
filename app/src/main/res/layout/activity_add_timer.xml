@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/constraintLayout"
+    android:id="@+id/add_timer_constraint_layout"
     tools:context=".AddTimerActivity">
 
     <ScrollView
@@ -17,7 +17,7 @@
             android:orientation="vertical" >
 
             <EditText
-                android:id="@+id/editTextTimerNameInput"
+                android:id="@+id/add_timer_timer_name_edit_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="100dp"
@@ -36,13 +36,15 @@
                     android:id="@+id/add_timer_step_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Add Timer Step" />
+                    android:text="Add Timer Step"
+                    android:layout_marginRight="5dp"/>
 
                 <Button
                     android:id="@+id/timer_form_input_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Add Timer" />
+                    android:text="Add Timer"
+                    android:layout_marginLeft="5dp"/>
             </LinearLayout>
 
             <LinearLayout

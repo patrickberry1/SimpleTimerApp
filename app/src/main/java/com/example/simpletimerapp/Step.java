@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class Step implements Serializable {
     int minutes, seconds;
+    String title;
 
     public Step(int minutes, int seconds) {
         this.minutes = minutes;

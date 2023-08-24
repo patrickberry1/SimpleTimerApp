@@ -6,6 +6,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -25,6 +26,7 @@ public class StartTimerActivity extends AppCompatActivity {
     TextView timer_text_view;
     TextView rep_counter_text_view;
     ConstraintLayout cl;
+    ProgressBar progress_bar;
 
     //Timer variables
     CountDownTimer timer;
@@ -54,12 +56,15 @@ public class StartTimerActivity extends AppCompatActivity {
         for(int i=0; i<steps.size(); i++){
             totalSeconds+=steps.get(i).seconds;
             totalSeconds+=steps.get(i).minutes*60;
+            totalSeconds++;
         }
 
         //Views for timer display
         start_timer_button = (FloatingActionButton) findViewById(R.id.start_timer_button);
         timer_text_view = (TextView) findViewById(R.id.timer_text_view);
         rep_counter_text_view = (TextView) findViewById(R.id.rep_counter_text_view);
+        progress_bar = (ProgressBar) findViewById(R.id.timer_progress_bar);
+        progress_bar.setMax(totalSeconds);
 
 
         //Start timer
@@ -78,7 +83,7 @@ public class StartTimerActivity extends AppCompatActivity {
 
                 timer = new CountDownTimer(totalSeconds * 1000, 1000) {
                     public void onTick(long millisUntilFinished) {
-                        if(stepSeconds==0){
+                        if(stepSeconds<0){
                             stepIndex++;
                             currStep=steps.get(stepIndex);
                             if (currStep!=null){
@@ -106,6 +111,8 @@ public class StartTimerActivity extends AppCompatActivity {
                         //Display mins and secs
                         timer_text_view.setText(minsString + ":" + secsString);
 
+                        //tick up progress bar
+                        progress_bar.incrementProgressBy(1);
                         //Tick down totalSeconds
                         stepSeconds--;
                     }
@@ -121,6 +128,18 @@ public class StartTimerActivity extends AppCompatActivity {
                         pause_timer_button.setClickable(false);
                         stop_timer_button.setVisibility(View.INVISIBLE);
                         stop_timer_button.setClickable(false);
+
+                        //Set vars
+                        stepIndex = 0;
+                        currStep = steps.get(stepIndex);
+                        stepSeconds=(currStep.minutes*60) + currStep.seconds;
+                        totalSeconds = 0;
+                        for(int i=0; i<steps.size(); i++){
+                            totalSeconds+=steps.get(i).seconds;
+                            totalSeconds+=steps.get(i).minutes*60;
+                            totalSeconds++;
+                        }
+                        progress_bar.setProgress(0);
                     }
                 }.start();
             }
@@ -153,9 +172,19 @@ public class StartTimerActivity extends AppCompatActivity {
                 stop_timer_button.setVisibility(View.INVISIBLE);
                 stop_timer_button.setClickable(false);
                 timer.cancel();
-                totalSeconds = 0;
+
+                //Set vars
                 stepIndex = 0;
+                currStep = steps.get(stepIndex);
+                stepSeconds=(currStep.minutes*60) + currStep.seconds;
+                totalSeconds = 0;
+                for(int i=0; i<steps.size(); i++){
+                    totalSeconds+=steps.get(i).seconds;
+                    totalSeconds+=steps.get(i).minutes*60;
+                    totalSeconds++;
+                }
                 timer_text_view.setText("00:00");
+                progress_bar.setProgress(0);
             }
         });
     }

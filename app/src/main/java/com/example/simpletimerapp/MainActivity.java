@@ -6,16 +6,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
-import android.view.Gravity;
+import android.util.JsonReader;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -26,22 +27,50 @@ public class MainActivity extends AppCompatActivity {
 
     RecyclerView timer_list_rec_view;
     FloatingActionButton add_timer_button;
+    DatabaseHelper DB;
+    ConstraintLayout constraintLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //temporary static list of timers
-        List<Timer> timers = new ArrayList<Timer>();
-        timers.add(new Timer("10/3 Repeaters", Arrays.asList(new Step[]{new Step(0, 10), new Step(0, 3), new Step(0, 10), new Step(0, 3), new Step(0, 10)})));
+        //INITIALIZE STUFF
+        DB = new DatabaseHelper(getApplicationContext());
+        constraintLayout = findViewById(R.id.main_activity_cl);
 
-        //set up recycler view
+
+        //TEMP STATIC TIMERS
+        List<Timer> timers = new ArrayList<Timer>();
+        //timers.add(new Timer("10/3 Repeaters", Arrays.asList(new Step[]{new Step(0, 10), new Step(0, 3), new Step(0, 10), new Step(0, 3), new Step(0, 10)})));
+
+
+        //TEMP DB INSERT
+//        String temp_structure = "{\"steps\":[{\"mins\": 0, \"secs\": 7}, {\"mins\":0, \"secs\":3}]}";
+        DB.deleteTimer("7/3 repeaters");
+        DB.deleteTimer("NOT 7/3 I promise");
+        DB.deleteTimer("another 7/3 repeaters");
+//        DB.insertTimer("7/3 repeaters", temp_structure);
+//        DB.insertTimer("NOT 7/3 I promise", temp_structure);
+//        DB.insertTimer("another 7/3 repeaters", temp_structure);
+
+        //TEMP DB GET
+        Cursor res = DB.getData();
+        while(res.moveToNext()){
+            String name = res.getString(1);
+            String structure = res.getString(2);
+            List<Step> steps = getStepsFromStructure(structure);
+            if (steps != null){
+                timers.add(new Timer(name, steps));
+            }
+        }
+
+        //SET UP RECYCLER VIEW
         timer_list_rec_view = findViewById(R.id.timer_list_rec_view);
         timer_list_rec_view.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        final MyAdapter adapter = new MyAdapter(getApplicationContext(), timers);
+        final TimerAdapter adapter = new TimerAdapter(getApplicationContext(), timers);
         timer_list_rec_view.setAdapter(adapter);
-        adapter.setOnClickListener(new MyAdapter.OnClickListener() {
+        adapter.setOnClickListener(new TimerAdapter.OnClickListener() {
             @Override
             public void onClick(int position, Timer timer){
                 Intent intent = new Intent(MainActivity.this, StartTimerActivity.class);
@@ -51,7 +80,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //set up add timer button
+
+        //SET UP ADD TIMER BUTTON
         add_timer_button = findViewById(R.id.add_timer_button);
         add_timer_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,5 +91,27 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public ArrayList<Step> getStepsFromStructure(String structure){
+        ArrayList<Step> result = new ArrayList<Step>();
+        JSONObject jobj;
+        JSONArray steps;
+        try {
+             jobj = new JSONObject(structure);
+             steps = jobj.getJSONArray("steps");
+             for(int i=0; i< steps.length(); i++){
+                 JSONObject stepFromJSON = steps.getJSONObject(i);
+                 int mins = Integer.parseInt(stepFromJSON.get("mins").toString());
+                 int secs = Integer.parseInt(stepFromJSON.get("secs").toString());
+                 result.add(new Step(mins, secs));
+             }
+        } catch (JSONException e) {
+            Snackbar snackbar = Snackbar.make(constraintLayout, "Invalid JSON :(", Snackbar.LENGTH_SHORT);
+            snackbar.show();
+            return null;
+        }
+
+        return result;
     }
 }
