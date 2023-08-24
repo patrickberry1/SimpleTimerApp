@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
@@ -20,6 +21,7 @@ import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
@@ -27,10 +29,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.Serializable;
 
  public class AddTimerActivity extends AppCompatActivity {
 
-    Button timer_form_input_button;
+    FloatingActionButton timer_form_input_button;
     ConstraintLayout constraintLayout;
     LinearLayout.LayoutParams layoutParams;
     DatabaseHelper DB;
@@ -52,14 +55,22 @@ import java.io.IOException;
                 EditText timer_name = (EditText) findViewById(R.id.add_timer_timer_name_edit_text);
                 if (timer_name.getText().toString().length() > 0){
                     String structure = createTimerStructure();
-                    boolean res = DB.insertTimer(timer_name.getText().toString(), structure);
-                    Snackbar snackbar;
-                    if (res){
-                        snackbar = Snackbar.make(constraintLayout, "Inserted successfully!!", Snackbar.LENGTH_SHORT);
+                    if (structure == ""){
+                        Snackbar snackbar;
+                        snackbar = Snackbar.make(constraintLayout, "Invalid timer details...", Snackbar.LENGTH_SHORT);
+                        snackbar.show();
                     } else {
-                        snackbar = Snackbar.make(constraintLayout, "Insert failed!!", Snackbar.LENGTH_SHORT);
+                        boolean res = DB.insertTimer(timer_name.getText().toString(), structure);
+                        Snackbar snackbar;
+                        if (res){
+                            snackbar = Snackbar.make(constraintLayout, "Inserted successfully!!", Snackbar.LENGTH_SHORT);
+                            Intent intent = new Intent(AddTimerActivity.this, MainActivity.class);
+                            startActivity(intent);
+                        } else {
+                            snackbar = Snackbar.make(constraintLayout, "Insert failed!!", Snackbar.LENGTH_SHORT);
+                        }
+                        snackbar.show();
                     }
-                    snackbar.show();
                 } else {
                     Snackbar snackbar = Snackbar.make(constraintLayout, "Must enter a timer name!", Snackbar.LENGTH_SHORT);
                     snackbar.show();
@@ -68,7 +79,7 @@ import java.io.IOException;
         });
 
         //SET UP ADD TIMER STEP BUTTON
-        Button addTimerStepButton = (Button) findViewById(R.id.add_timer_step_button);
+        FloatingActionButton addTimerStepButton = (FloatingActionButton) findViewById(R.id.add_timer_step_button);
         layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         addTimerStepButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,6 +108,9 @@ import java.io.IOException;
 
         LinearLayout ll = (LinearLayout) findViewById(R.id.timer_step_container_ll);
         int child_count = ll.getChildCount();
+        if (child_count == 0){
+            return "";
+        }
         JSONArray steps_json_array = new JSONArray();
 
         for(int i=0; i<child_count; i++){
@@ -109,16 +123,19 @@ import java.io.IOException;
             try{
                 temp_step.put("mins", Integer.parseInt(step_mins_text_view.getText().toString()));
                 temp_step.put("secs", Integer.parseInt(step_secs_text_view.getText().toString()));
+                temp_step.put("title", step_name_text_view.getText().toString());
                 steps_json_array.put(temp_step);
-            } catch (JSONException e){
+            } catch (Exception e){
                 e.printStackTrace();
+                return "";
             }
         }
         JSONObject steps_json_object = new JSONObject();
         try{
             steps_json_object.put("steps", steps_json_array);
-        } catch (JSONException e){
+        } catch (Exception e){
             e.printStackTrace();
+            return "";
         }
         String result = steps_json_object.toString();
         return result;

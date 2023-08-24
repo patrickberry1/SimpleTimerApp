@@ -6,7 +6,8 @@ public class Step implements Serializable {
     int minutes, seconds;
     String title;
 
-    public Step(int minutes, int seconds) {
+    public Step(int minutes, int seconds, String title) {
+        this.title = title;
         this.minutes = minutes;
         this.seconds = seconds;
     }

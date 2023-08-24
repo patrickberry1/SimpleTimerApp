@@ -41,20 +41,17 @@ public class MainActivity extends AppCompatActivity {
 
 
         //TEMP STATIC TIMERS
-        List<Timer> timers = new ArrayList<Timer>();
         //timers.add(new Timer("10/3 Repeaters", Arrays.asList(new Step[]{new Step(0, 10), new Step(0, 3), new Step(0, 10), new Step(0, 3), new Step(0, 10)})));
 
 
-        //TEMP DB INSERT
-//        String temp_structure = "{\"steps\":[{\"mins\": 0, \"secs\": 7}, {\"mins\":0, \"secs\":3}]}";
-        DB.deleteTimer("7/3 repeaters");
-        DB.deleteTimer("NOT 7/3 I promise");
-        DB.deleteTimer("another 7/3 repeaters");
-//        DB.insertTimer("7/3 repeaters", temp_structure);
-//        DB.insertTimer("NOT 7/3 I promise", temp_structure);
-//        DB.insertTimer("another 7/3 repeaters", temp_structure);
+        //TEMP DB STUFF
+        //String temp_structure = "{\"steps\":[{\"mins\": 0, \"secs\": 7}, {\"mins\":0, \"secs\":3}]}";
+        DB.deleteTimer("10/30 max hangs");
+        DB.deleteTimer("10/30 hangs for real");
 
-        //TEMP DB GET
+
+        //DB GET
+        List<Timer> timers = new ArrayList<Timer>();
         Cursor res = DB.getData();
         while(res.moveToNext()){
             String name = res.getString(1);
@@ -102,9 +99,10 @@ public class MainActivity extends AppCompatActivity {
              steps = jobj.getJSONArray("steps");
              for(int i=0; i< steps.length(); i++){
                  JSONObject stepFromJSON = steps.getJSONObject(i);
+                 String title = stepFromJSON.get("title").toString();
                  int mins = Integer.parseInt(stepFromJSON.get("mins").toString());
                  int secs = Integer.parseInt(stepFromJSON.get("secs").toString());
-                 result.add(new Step(mins, secs));
+                 result.add(new Step(mins, secs, title));
              }
         } catch (JSONException e) {
             Snackbar snackbar = Snackbar.make(constraintLayout, "Invalid JSON :(", Snackbar.LENGTH_SHORT);

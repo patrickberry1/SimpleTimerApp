@@ -24,7 +24,7 @@ public class StartTimerActivity extends AppCompatActivity {
     FloatingActionButton pause_timer_button;
     FloatingActionButton stop_timer_button;
     TextView timer_text_view;
-    TextView rep_counter_text_view;
+    TextView step_title_text_view;
     ConstraintLayout cl;
     ProgressBar progress_bar;
 
@@ -62,7 +62,8 @@ public class StartTimerActivity extends AppCompatActivity {
         //Views for timer display
         start_timer_button = (FloatingActionButton) findViewById(R.id.start_timer_button);
         timer_text_view = (TextView) findViewById(R.id.timer_text_view);
-        rep_counter_text_view = (TextView) findViewById(R.id.rep_counter_text_view);
+        step_title_text_view = (TextView) findViewById(R.id.step_title_text_view);
+        step_title_text_view.setText(currStep.title);
         progress_bar = (ProgressBar) findViewById(R.id.timer_progress_bar);
         progress_bar.setMax(totalSeconds);
 
@@ -88,6 +89,7 @@ public class StartTimerActivity extends AppCompatActivity {
                             currStep=steps.get(stepIndex);
                             if (currStep!=null){
                                 stepSeconds=(currStep.minutes*60) + currStep.seconds;
+                                step_title_text_view.setText(currStep.title);
                             }
                         }
 
@@ -134,6 +136,7 @@ public class StartTimerActivity extends AppCompatActivity {
                         currStep = steps.get(stepIndex);
                         stepSeconds=(currStep.minutes*60) + currStep.seconds;
                         totalSeconds = 0;
+                        step_title_text_view.setText(currStep.title);
                         for(int i=0; i<steps.size(); i++){
                             totalSeconds+=steps.get(i).seconds;
                             totalSeconds+=steps.get(i).minutes*60;

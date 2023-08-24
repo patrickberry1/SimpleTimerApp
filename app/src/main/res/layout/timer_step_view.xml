@@ -50,7 +50,15 @@
                 android:hint="Minutes"
                 android:inputType="number"
                 android:textSize="20sp"
-                android:drawableBottom="@color/black" />
+                android:drawableBottom="@color/black"
+                android:text="0"/>
+
+            <TextView
+                android:id="@+id/mins_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="minutes" />
 
             <EditText
                 android:id="@+id/step_secs_text_view"
@@ -60,7 +68,15 @@
                 android:hint="Seconds"
                 android:inputType="number"
                 android:textSize="20sp"
-                android:drawableBottom="@color/black" />
+                android:drawableBottom="@color/black"
+                android:text="10"/>
+
+            <TextView
+                android:id="@+id/secs_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="seconds" />
 
         </LinearLayout>
 
