@@ -14,3 +14,7 @@
 3. Tapping tick button adds timer to database as long as fields are correct.
 4. Tap on timer in list goes to timer page on which you can run a timer.
 5. Can pause and stop timer.
+
+###TODO
+Tidy eberything up and make it all look nice.
+Implement Reps for timer steps.
