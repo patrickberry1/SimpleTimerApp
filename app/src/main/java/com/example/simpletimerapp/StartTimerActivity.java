@@ -6,6 +6,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -27,6 +28,8 @@ public class StartTimerActivity extends AppCompatActivity {
     TextView step_title_text_view;
     ConstraintLayout cl;
     ProgressBar progress_bar;
+    ListView timer_step_list_view;
+
 
     //Timer variables
     CountDownTimer timer;
@@ -66,7 +69,6 @@ public class StartTimerActivity extends AppCompatActivity {
         step_title_text_view.setText(currStep.title);
         progress_bar = (ProgressBar) findViewById(R.id.timer_progress_bar);
         progress_bar.setMax(totalSeconds);
-
 
         //Start timer
         start_timer_button.setOnClickListener(new View.OnClickListener()

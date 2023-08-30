@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
@@ -84,14 +85,24 @@ import java.io.Serializable;
         addTimerStepButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                //inflate new timerstepview
                 LayoutInflater factory = LayoutInflater.from(getApplicationContext());
                 View timer_step_view = factory.inflate(R.layout.timer_step_view, null);
                 timer_step_view.setId(View.generateViewId());
 
+                //set image for remove button
                 LinearLayout ll = (LinearLayout) findViewById(R.id.timer_step_container_ll);
                 ImageButton remove = timer_step_view.findViewById(R.id.step_delete_image_button);
                 remove.setImageResource(R.drawable.baseline_delete_24);
+
+                //set number picker max and min vals
+                NumberPicker step_mins_number_picker = (NumberPicker) timer_step_view.findViewById(R.id.step_mins_number_picker);
+                step_mins_number_picker.setMinValue(0);
+                step_mins_number_picker.setMaxValue(59);
+
+                NumberPicker step_secs_number_picker = (NumberPicker) timer_step_view.findViewById(R.id.step_secs_number_picker);
+                step_secs_number_picker.setMinValue(0);
+                step_secs_number_picker.setMaxValue(59);
 
                 ll.addView(timer_step_view);
                 remove.setOnClickListener(new View.OnClickListener() {
@@ -106,30 +117,46 @@ import java.io.Serializable;
 
     public String createTimerStructure() {
 
+        //Get timer step container layout and number of timer steps
         LinearLayout ll = (LinearLayout) findViewById(R.id.timer_step_container_ll);
         int child_count = ll.getChildCount();
+        //if no children break
         if (child_count == 0){
+            //TODO: return no children string?
             return "";
         }
+
+        //Instantiate JSONArray
         JSONArray steps_json_array = new JSONArray();
 
+        //Loop through all step views
         for(int i=0; i<child_count; i++){
+
+            //get child at index and get inputs from child
             ConstraintLayout child_view = (ConstraintLayout) ll.getChildAt(i);
             EditText step_name_text_view = child_view.findViewById(R.id.step_name_text_view);
-            EditText step_mins_text_view = child_view.findViewById(R.id.step_mins_text_view);
-            EditText step_secs_text_view = child_view.findViewById(R.id.step_secs_text_view);
+            NumberPicker step_mins_number_picker = child_view.findViewById(R.id.step_mins_number_picker);
+            NumberPicker step_secs_number_picker = child_view.findViewById(R.id.step_secs_number_picker);
+            //TODO: get reps and rest
 
+            //instantiate step JSONObject
             JSONObject temp_step = new JSONObject();
             try{
-                temp_step.put("mins", Integer.parseInt(step_mins_text_view.getText().toString()));
-                temp_step.put("secs", Integer.parseInt(step_secs_text_view.getText().toString()));
+                //get input values and add to JSONObject
+                //number pickers seem buggy and return value+1 if you interact with them?
+                temp_step.put("mins", step_mins_number_picker.getValue()>0 ? step_mins_number_picker.getValue()-1 : step_mins_number_picker.getValue());
+                temp_step.put("secs", step_secs_number_picker.getValue()>0 ? step_secs_number_picker.getValue()-1 : step_secs_number_picker.getValue());
                 temp_step.put("title", step_name_text_view.getText().toString());
+                //TODO: add reps and rest
+
+                //add JSONObject to JSONArray
                 steps_json_array.put(temp_step);
             } catch (Exception e){
                 e.printStackTrace();
                 return "";
             }
         }
+        //create JSONObject container to return JSONArray
         JSONObject steps_json_object = new JSONObject();
         try{
             steps_json_object.put("steps", steps_json_array);
@@ -137,6 +164,8 @@ import java.io.Serializable;
             e.printStackTrace();
             return "";
         }
+
+        //return JSONObject as string
         String result = steps_json_object.toString();
         return result;
     }

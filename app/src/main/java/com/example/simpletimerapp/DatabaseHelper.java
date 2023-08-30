@@ -40,6 +40,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public boolean insertTimer(String name, String structure){
+        //TODO: don't allow insert of duplicate names? Or should I rework everything to include timer ids?
+        
         SQLiteDatabase DB = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put("timer_name", name);

@@ -3,12 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:background="@drawable/ll_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -22,17 +24,21 @@
                 android:id="@+id/step_name_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="10"
                 android:gravity="left"
                 android:hint="Name"
-                android:textSize="30sp"
-                android:drawableBottom="@color/black"/>
+                android:textColorHint="@color/accent"
+                android:textColor="@color/accent"
+                android:textSize="25dp"
+                android:drawableBottom="@color/primary"/>
 
             <ImageButton
                 android:id="@+id/step_delete_image_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:layout_weight="0.5"
+                android:background="@drawable/ll_background"
                 app:srcCompat="@drawable/baseline_delete_24" />
 
         </LinearLayout>
@@ -42,42 +48,81 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/step_mins_text_view"
+            <NumberPicker
+                android:id="@+id/step_mins_number_picker"
+                android:layout_height="50dp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="Minutes"
-                android:inputType="number"
-                android:textSize="20sp"
-                android:drawableBottom="@color/black"
-                android:text="0"/>
+                android:theme="@style/NumberPickerText"
+                />
 
             <TextView
                 android:id="@+id/mins_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="minutes" />
+                android:text="minutes"
+                android:textColor="@color/accent"
+                android:layout_gravity="center"
+                android:textSize="15dp"/>
 
-            <EditText
-                android:id="@+id/step_secs_text_view"
+            <NumberPicker
+                android:id="@+id/step_secs_number_picker"
+                android:layout_height="50dp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="Seconds"
-                android:inputType="number"
-                android:textSize="20sp"
-                android:drawableBottom="@color/black"
-                android:text="10"/>
+                android:theme="@style/NumberPickerText" />
 
             <TextView
                 android:id="@+id/secs_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="seconds" />
+                android:textColor="@color/accent"
+                android:text="seconds"
+                android:layout_gravity="center"
+                android:textSize="15dp"/>
 
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/reps_input_edit_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="1"
+                android:drawableBottom="@color/accent"
+                android:textColor="@color/accent"
+                android:inputType="number" />
+
+            <TextView
+                android:id="@+id/reps_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/accent"
+                android:text="Reps" />
+
+            <EditText
+                android:id="@+id/rest_input_edit_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="0"
+                android:drawableBottom="@color/accent"
+                android:textColor="@color/accent"
+                android:inputType="number" />
+
+            <TextView
+                android:id="@+id/rest_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/accent"
+                android:text="Rest Seconds" />
         </LinearLayout>
 
     </LinearLayout>

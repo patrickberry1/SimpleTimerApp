@@ -46,8 +46,8 @@ public class MainActivity extends AppCompatActivity {
 
         //TEMP DB STUFF
         //String temp_structure = "{\"steps\":[{\"mins\": 0, \"secs\": 7}, {\"mins\":0, \"secs\":3}]}";
-        DB.deleteTimer("10/30 max hangs");
-        DB.deleteTimer("10/30 hangs for real");
+//        DB.deleteTimer("10/30 max hangs");
+//        DB.deleteTimer("10/30 hangs for real");
 
 
         //DB GET

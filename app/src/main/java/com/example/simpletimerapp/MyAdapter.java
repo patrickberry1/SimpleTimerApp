@@ -1,12 +1,15 @@
 package com.example.simpletimerapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
@@ -15,10 +18,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
     Context context;
     List<Timer> timers;
     OnClickListener onClickListener;
+    DatabaseHelper DB;
 
     public MyAdapter(Context context, List<Timer> timers) {
         this.context = context;
         this.timers = timers;
+        DB = new DatabaseHelper(context.getApplicationContext());
     }
 
     @NonNull

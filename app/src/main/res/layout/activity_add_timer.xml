@@ -49,6 +49,8 @@
                 android:layout_marginTop="40dp"
                 android:ems="10"
                 android:hint="Timer Name"
+                android:textColor="@color/primary"
+                android:textColorHint="@color/secondary"
                 android:inputType="textPersonName" />
 
             <LinearLayout
