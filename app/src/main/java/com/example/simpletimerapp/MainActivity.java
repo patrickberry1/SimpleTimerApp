@@ -46,19 +46,19 @@ public class MainActivity extends AppCompatActivity {
 
         //TEMP DB STUFF
         //String temp_structure = "{\"steps\":[{\"mins\": 0, \"secs\": 7}, {\"mins\":0, \"secs\":3}]}";
-//        DB.deleteTimer("10/30 max hangs");
-//        DB.deleteTimer("10/30 hangs for real");
+        //TODO: delete all timers
 
 
         //DB GET
         List<Timer> timers = new ArrayList<Timer>();
         Cursor res = DB.getData();
         while(res.moveToNext()){
+            int id = res.getInt(0);
             String name = res.getString(1);
             String structure = res.getString(2);
             List<Step> steps = getStepsFromStructure(structure);
             if (steps != null){
-                timers.add(new Timer(name, steps));
+                timers.add(new Timer(name, steps, id));
             }
         }
 
@@ -73,7 +73,15 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, StartTimerActivity.class);
                 intent.putExtra("Name", timer.name);
                 intent.putExtra("Steps",(Serializable) timer.stepList);
+                intent.putExtra("id", timer.id);
                 startActivity(intent);
+            }
+        });
+        adapter.setOnItemDeleteListener(new TimerAdapter.OnItemDeleteListener() {
+            @Override
+            public void OnItemClick(int position) {
+                timers.remove(position);
+                adapter.notifyItemRemoved(position);
             }
         });
 

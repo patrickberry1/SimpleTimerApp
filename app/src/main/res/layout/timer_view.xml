@@ -3,32 +3,47 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="2dp">
+    android:orientation="vertical"
+    android:background="@drawable/ll_background">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
-        android:background="@drawable/ll_background"
         android:id="@+id/timer_view_ll">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/timer_vector_image"
+            app:tint="@color/secondary1" />
 
         <TextView
             android:id="@+id/timer_view_timer_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="24sp"
-            android:textColor="@color/accent"
+            android:textColor="@color/primary1"
             android:layout_marginLeft="5dp"
             android:layout_weight="3"/>
 
-<!--        <Button-->
-<!--            android:id="@+id/timer_view_delete_button"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:layout_gravity="end|center"-->
-<!--            android:background="@android:color/transparent"-->
-<!--            android:drawableTop="@drawable/baseline_delete_24" />-->
 
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/timer_view_delete_button"
+            android:layout_width="50dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:background="@drawable/button_background"
+            android:drawableTop="@drawable/baseline_delete_24"
+            android:drawableTint="@color/primary1"
+            android:gravity="center"
+            android:paddingTop="5dp" />
     </LinearLayout>
 
 </LinearLayout>

@@ -3,6 +3,8 @@ package com.example.simpletimerapp;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.media.AudioManager;
+import android.media.ToneGenerator;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
@@ -51,6 +53,9 @@ public class StartTimerActivity extends AppCompatActivity {
         name = extras.getString("Name");
         setTitle(name);
 
+        //Setup tone generator
+        ToneGenerator toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
+
         //Set vars
         stepIndex = 0;
         currStep = steps.get(stepIndex);
@@ -70,6 +75,28 @@ public class StartTimerActivity extends AppCompatActivity {
         progress_bar = (ProgressBar) findViewById(R.id.timer_progress_bar);
         progress_bar.setMax(totalSeconds);
 
+        //Set view stuff
+        //Get minutes and seconds to display
+        String tempMins;
+        String tempSecs;
+        int mins = currStep.minutes;
+        int secs = currStep.seconds;
+
+        if (mins < 10) {
+            tempMins = String.format("0%d", mins);
+        } else {
+            tempMins = String.valueOf(mins);
+        }
+        if (secs < 10) {
+            tempSecs = String.format("0%d", secs);
+        } else {
+            tempSecs = String.valueOf(secs);
+        }
+
+        //Display mins and secs
+        timer_text_view.setText(tempMins + ":" + tempSecs);
+
+
         //Start timer
         start_timer_button.setOnClickListener(new View.OnClickListener()
         {
@@ -84,6 +111,8 @@ public class StartTimerActivity extends AppCompatActivity {
                 stop_timer_button.setVisibility(View.VISIBLE);
                 stop_timer_button.setClickable(true);
 
+                setUpNextText();
+
                 timer = new CountDownTimer(totalSeconds * 1000, 1000) {
                     public void onTick(long millisUntilFinished) {
                         if(stepSeconds<0){
@@ -94,6 +123,19 @@ public class StartTimerActivity extends AppCompatActivity {
                                 step_title_text_view.setText(currStep.title);
                             }
                         }
+
+                        if (stepSeconds <= 3 && stepSeconds > 0) {
+                            toneGen1.startTone(ToneGenerator.TONE_SUP_RINGTONE, 400);
+                        } else if (stepSeconds == 30) {
+                            toneGen1.startTone(ToneGenerator.TONE_SUP_RINGTONE, 200);
+                        } else if (stepSeconds == 10) {
+                            toneGen1.startTone(ToneGenerator.TONE_SUP_RINGTONE, 200);
+                        } else if (stepSeconds == 0) {
+                            toneGen1.startTone(ToneGenerator.TONE_SUP_RINGTONE, 800);
+                        }
+
+                        //set up next text
+                        setUpNextText();
 
                         //Get minutes and seconds to display
                         String minsString;
@@ -192,5 +234,20 @@ public class StartTimerActivity extends AppCompatActivity {
                 progress_bar.setProgress(0);
             }
         });
+    }
+
+    public void setUpNextText() {
+        TextView up_next_text = (TextView) findViewById(R.id.up_next_text_view);
+        Step next_step;
+        String next_text;
+
+        if (stepIndex < steps.size()-1){
+            next_step = steps.get(stepIndex+1);
+            next_text = "Up Next: " + next_step.title;
+        } else {
+            next_text = "Up Next: Finished!!";
+        }
+
+        up_next_text.setText(next_text);
     }
 }

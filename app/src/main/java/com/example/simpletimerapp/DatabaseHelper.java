@@ -53,15 +53,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return true;
         }
     }
-    public boolean updateTimer(String name, String structure){
+    public boolean updateTimer(int id, String structure){
         SQLiteDatabase DB = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        cv.put("timer_name", name);
+        cv.put("id", id);
         cv.put("timer_structure", structure);
-        Cursor cursor = DB.rawQuery("Select * from timers where timer_name = ?", new String[] {name});
+        Cursor cursor = DB.rawQuery("Select * from timers where id = ?", new String[] {Integer.toString(id)});
 
         if(cursor.getCount() > 0){
-            long result = DB.update("timers", cv, "timer_name=?", new String[] {name});
+            long result = DB.update("timers", cv, "id=?", new String[] {Integer.toString(id)});
             if (result == -1){
                 return false;
             } else {
@@ -72,12 +72,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public boolean deleteTimer(String name){
+    public boolean deleteTimer(int id){
         SQLiteDatabase DB = this.getWritableDatabase();
-        Cursor cursor = DB.rawQuery("Select * from timers where timer_name = ?", new String[] {name});
+        Cursor cursor = DB.rawQuery("Select * from timers where id = ?", new String[] {Integer.toString(id)});
 
         if(cursor.getCount() > 0){
-            long result = DB.delete("timers", "timer_name=?", new String[] {name});
+            long result = DB.delete("timers", "id=?", new String[] {Integer.toString(id)});
             if (result == -1){
                 return false;
             } else {

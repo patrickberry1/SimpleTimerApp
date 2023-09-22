@@ -15,6 +15,15 @@ public class TimerAdapter extends RecyclerView.Adapter<TimerViewHolder> {
     Context context;
     List<Timer> timers;
     OnClickListener onClickListener;
+    private OnItemDeleteListener listener;
+
+    public interface OnItemDeleteListener{
+        void OnItemClick(int position);
+    }
+
+    public void setOnItemDeleteListener(OnItemDeleteListener deleteListener){
+        listener = deleteListener;
+    }
 
     public TimerAdapter(Context context, List<Timer> timers) {
         this.context = context;
@@ -24,12 +33,13 @@ public class TimerAdapter extends RecyclerView.Adapter<TimerViewHolder> {
     @NonNull
     @Override
     public TimerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new TimerViewHolder(LayoutInflater.from(context).inflate(R.layout.timer_view, parent, false));
+        return new TimerViewHolder(LayoutInflater.from(context).inflate(R.layout.timer_view, parent, false), listener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull TimerViewHolder holder, int position) {
         Timer timer = timers.get(position);
+        holder.itemView.setId(timers.get(position).id);
         holder.textView.setText(timers.get(position).getName());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
