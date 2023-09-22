@@ -18,7 +18,7 @@
 
 ### TODO:
 
-Tidy everything up and make it all look nice.
-Implement Reps for timer steps.
-Add settings to allow changing beep tone and things like that.
-Add edit timer functionality.
+1. Tidy everything up and make it all look nice
+2. Implement Reps for timer steps
+3. Add settings to allow changing beep tone and things like that
+4. Add edit timer functionality
