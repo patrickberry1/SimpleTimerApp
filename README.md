@@ -20,3 +20,5 @@
 
 Tidy everything up and make it all look nice.
 Implement Reps for timer steps.
+Add settings to allow changing beep tone and things like that.
+Add edit timer functionality.
