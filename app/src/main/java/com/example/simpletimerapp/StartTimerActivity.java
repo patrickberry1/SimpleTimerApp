@@ -28,6 +28,7 @@ public class StartTimerActivity extends AppCompatActivity {
     FloatingActionButton stop_timer_button;
     TextView timer_text_view;
     TextView step_title_text_view;
+    TextView reps_counter_text_view;
     ConstraintLayout cl;
     ProgressBar progress_bar;
     ListView timer_step_list_view;
@@ -41,6 +42,8 @@ public class StartTimerActivity extends AppCompatActivity {
     int totalSeconds;
     int stepIndex;
     int stepSeconds;
+    int repIndex;
+    boolean resting;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,19 +55,21 @@ public class StartTimerActivity extends AppCompatActivity {
         steps = (List<Step>) extras.getSerializable("Steps");
         name = extras.getString("Name");
         setTitle(name);
-
         //Setup tone generator
         ToneGenerator toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
 
         //Set vars
         stepIndex = 0;
+        resting = false;
         currStep = steps.get(stepIndex);
+        repIndex = currStep.reps-1;
         stepSeconds=(currStep.minutes*60) + currStep.seconds;
         totalSeconds = 0;
         for(int i=0; i<steps.size(); i++){
-            totalSeconds+=steps.get(i).seconds;
-            totalSeconds+=steps.get(i).minutes*60;
-            totalSeconds++;
+            totalSeconds+=steps.get(i).seconds*steps.get(i).reps;
+            totalSeconds+=steps.get(i).minutes*60*steps.get(i).reps;
+            totalSeconds+=steps.get(i).rest*Math.max(steps.get(i).reps-1, 0);
+            totalSeconds+=(2*steps.get(i).reps)-1;
         }
 
         //Views for timer display
@@ -72,6 +77,8 @@ public class StartTimerActivity extends AppCompatActivity {
         timer_text_view = (TextView) findViewById(R.id.timer_text_view);
         step_title_text_view = (TextView) findViewById(R.id.step_title_text_view);
         step_title_text_view.setText(currStep.title);
+        reps_counter_text_view = findViewById(R.id.reps_counter_text_view);
+        reps_counter_text_view.setText("Rep " + currStep.reps);
         progress_bar = (ProgressBar) findViewById(R.id.timer_progress_bar);
         progress_bar.setMax(totalSeconds);
 
@@ -116,11 +123,35 @@ public class StartTimerActivity extends AppCompatActivity {
                 timer = new CountDownTimer(totalSeconds * 1000, 1000) {
                     public void onTick(long millisUntilFinished) {
                         if(stepSeconds<0){
-                            stepIndex++;
-                            currStep=steps.get(stepIndex);
-                            if (currStep!=null){
-                                stepSeconds=(currStep.minutes*60) + currStep.seconds;
+                            if (repIndex < 0) {
+                                resting = false;
+                                stepIndex++;
+                                currStep = steps.get(stepIndex);
+                                if (currStep != null) {
+                                    stepSeconds = (currStep.minutes * 60) + currStep.seconds;
+                                    step_title_text_view.setText(currStep.title);
+                                    reps_counter_text_view.setText("Rep: " + repIndex);
+                                    repIndex = currStep.reps-1;
+                                }
+                            } else if (!resting) {
+                                if (repIndex > 0 && currStep.rest > 0){
+                                    stepSeconds = currStep.rest;
+                                    step_title_text_view.setText("REST!");
+                                    resting = true;
+                                    reps_counter_text_view.setText("Rep: " + repIndex);
+                                } else {
+                                    resting = false;
+                                    repIndex--;
+                                    stepSeconds = (currStep.minutes * 60) + currStep.seconds;
+                                    step_title_text_view.setText(currStep.title);
+                                    reps_counter_text_view.setText("Rep" + repIndex);
+                                }
+                            } else {
+                                resting = false;
+                                repIndex--;
+                                stepSeconds = (currStep.minutes * 60) + currStep.seconds;
                                 step_title_text_view.setText(currStep.title);
+                                reps_counter_text_view.setText("Rep" + repIndex);
                             }
                         }
 

@@ -110,7 +110,9 @@ public class MainActivity extends AppCompatActivity {
                  String title = stepFromJSON.get("title").toString();
                  int mins = Integer.parseInt(stepFromJSON.get("mins").toString());
                  int secs = Integer.parseInt(stepFromJSON.get("secs").toString());
-                 result.add(new Step(mins, secs, title));
+                 int reps = Integer.parseInt(stepFromJSON.get("reps").toString());
+                 int rest = Integer.parseInt(stepFromJSON.get("rest").toString());
+                 result.add(new Step(mins, secs, title, reps, rest));
              }
         } catch (JSONException e) {
             Snackbar snackbar = Snackbar.make(constraintLayout, "Invalid JSON :(", Snackbar.LENGTH_SHORT);

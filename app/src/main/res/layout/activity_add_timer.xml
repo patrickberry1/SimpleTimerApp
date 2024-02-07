@@ -19,7 +19,7 @@
         app:srcCompat="@drawable/ic_add_vec" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/timer_form_input_button"
+        android:id="@+id/timer_create_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="5dp"
@@ -29,14 +29,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/baseline_check_24" />
 
-    <ScrollView
-        android:id="@+id/scrollView2"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp">
+        android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -49,20 +48,33 @@
                 android:layout_marginTop="40dp"
                 android:ems="10"
                 android:hint="Timer Name"
+                android:inputType="textPersonName"
                 android:textColor="@color/primary1"
-                android:textColorHint="@color/secondary1"
-                android:inputType="textPersonName" />
-
-            <LinearLayout
-                android:id="@+id/timer_step_container_ll"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="28dp"
-                android:orientation="vertical">
-
-            </LinearLayout>
+                android:textColorHint="@color/secondary1" />
 
         </LinearLayout>
-    </ScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ScrollView
+                android:id="@+id/scrollView2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="top">
+
+                <LinearLayout
+                    android:id="@+id/timer_step_container_ll"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+            </ScrollView>
+        </LinearLayout>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
